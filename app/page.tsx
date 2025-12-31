@@ -1,20 +1,31 @@
-import { Carousel } from 'components/carousel';
-import { ThreeItemGrid } from 'components/grid/three-items';
+import {
+  Hero,
+  CollectionGrid,
+  FeaturedProducts,
+  BrandCarousel,
+  Newsletter,
+} from 'components/home';
 import Footer from 'components/layout/footer';
 
 export const metadata = {
+  title: 'Redline Diecast | Premium Model Cars for Collectors',
   description:
-    'High-performance ecommerce store built with Next.js, Vercel, and Shopify.',
+    'Shop premium diecast model cars from Ferrari, Lamborghini, Porsche, and more. Collector quality scale models for enthusiasts.',
   openGraph: {
-    type: 'website'
-  }
+    type: 'website',
+    title: 'Redline Diecast | Premium Model Cars for Collectors',
+    description: 'Shop premium diecast model cars from Ferrari, Lamborghini, Porsche, and more.',
+  },
 };
 
 export default function HomePage() {
   return (
     <>
-      <ThreeItemGrid />
-      <Carousel />
+      <Hero />
+      <CollectionGrid />
+      <FeaturedProducts />
+      <BrandCarousel />
+      <Newsletter />
       <Footer />
     </>
   );

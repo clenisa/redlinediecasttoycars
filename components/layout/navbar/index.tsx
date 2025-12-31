@@ -1,58 +1,70 @@
 import CartModal from 'components/cart/modal';
-import LogoSquare from 'components/logo-square';
 import { getMenu } from 'lib/shopify';
+import { mockMenu } from 'lib/mock-data';
 import { Menu } from 'lib/shopify/types';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import MobileMenu from './mobile-menu';
 import Search, { SearchSkeleton } from './search';
 
-const { SITE_NAME } = process.env;
+const SITE_NAME = process.env.SITE_NAME || 'Redline Diecast';
 
 export async function Navbar() {
-  const menu = await getMenu('next-js-frontend-header-menu');
+  let menu: Menu[] = [];
+
+  try {
+    menu = await getMenu('next-js-frontend-header-menu');
+  } catch {
+    // Fallback to mock menu if Shopify isn't configured
+    menu = mockMenu;
+  }
+
+  if (!menu.length) {
+    menu = mockMenu;
+  }
 
   return (
-    <nav className="relative flex items-center justify-between p-4 lg:px-6">
-      <div className="block flex-none md:hidden">
-        <Suspense fallback={null}>
-          <MobileMenu menu={menu} />
-        </Suspense>
-      </div>
-      <div className="flex w-full items-center">
-        <div className="flex w-full md:w-1/3">
-          <Link
-            href="/"
-            prefetch={true}
-            className="mr-2 flex w-full items-center justify-center md:w-auto lg:mr-6"
-          >
-            <LogoSquare />
-            <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block">
-              {SITE_NAME}
-            </div>
-          </Link>
-          {menu.length ? (
-            <ul className="hidden gap-6 text-sm md:flex md:items-center">
-              {menu.map((item: Menu) => (
-                <li key={item.title}>
-                  <Link
-                    href={item.path}
-                    prefetch={true}
-                    className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
-                  >
-                    {item.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </div>
-        <div className="hidden justify-center md:flex md:w-1/3">
-          <Suspense fallback={<SearchSkeleton />}>
-            <Search />
+    <nav className="sticky top-0 z-50 border-b border-neutral-100 bg-white/80 backdrop-blur-lg dark:border-neutral-800 dark:bg-neutral-950/80">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-8">
+        {/* Mobile menu */}
+        <div className="flex md:hidden">
+          <Suspense fallback={null}>
+            <MobileMenu menu={menu} />
           </Suspense>
         </div>
-        <div className="flex justify-end md:w-1/3">
+
+        {/* Logo - centered on mobile, left on desktop */}
+        <Link
+          href="/"
+          prefetch={true}
+          className="flex items-center gap-2 transition-opacity hover:opacity-80"
+        >
+          <span className="text-xl font-bold tracking-tight text-red-600">REDLINE</span>
+          <span className="hidden text-xl font-light tracking-wide sm:inline">DIECAST</span>
+        </Link>
+
+        {/* Desktop Navigation */}
+        <ul className="hidden items-center gap-8 md:flex">
+          {menu.map((item: Menu) => (
+            <li key={item.title}>
+              <Link
+                href={item.path}
+                prefetch={true}
+                className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
+              >
+                {item.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        {/* Right side: Search + Cart */}
+        <div className="flex items-center gap-4">
+          <div className="hidden md:block">
+            <Suspense fallback={<SearchSkeleton />}>
+              <Search />
+            </Suspense>
+          </div>
           <CartModal />
         </div>
       </div>
