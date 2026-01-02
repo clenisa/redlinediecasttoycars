@@ -4,7 +4,7 @@ import Footer from 'components/layout/footer';
 
 export const metadata = {
   description:
-    'High-performance ecommerce store built with Next.js, Vercel, and Shopify.',
+    'Premium diecast model cars for collectors and enthusiasts. Shop Ferrari, Lamborghini, Porsche, and more at Redline Diecast Toy Cars.',
   openGraph: {
     type: 'website'
   }

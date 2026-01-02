@@ -8,25 +8,13 @@ export function WelcomeToast() {
     // ignore if screen height is too small
     if (window.innerHeight < 650) return;
     if (!document.cookie.includes('welcome-toast=2')) {
-      toast('🛍️ Welcome to Next.js Commerce!', {
+      toast('Welcome to Redline Diecast Toy Cars!', {
         id: 'welcome-toast',
-        duration: Infinity,
+        duration: 5000,
         onDismiss: () => {
           document.cookie = 'welcome-toast=2; max-age=31536000; path=/';
         },
-        description: (
-          <>
-            This is a high-performance, SSR storefront powered by Shopify, Next.js, and Vercel.{' '}
-            <a
-              href="https://vercel.com/templates/next.js/nextjs-commerce"
-              className="text-blue-600 hover:underline"
-              target="_blank"
-            >
-              Deploy your own
-            </a>
-            .
-          </>
-        )
+        description: 'Premium diecast model cars for collectors and enthusiasts.'
       });
     }
   }, []);
