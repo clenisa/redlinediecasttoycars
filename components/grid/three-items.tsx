@@ -1,4 +1,5 @@
 import { GridTileImage } from 'components/grid/tile';
+import { MOCK_PRODUCTS } from 'lib/mock-data';
 import { getCollectionProducts } from 'lib/shopify';
 import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
@@ -43,9 +44,14 @@ function ThreeItemGridItem({
 
 export async function ThreeItemGrid() {
   // Collections that start with `hidden-*` are hidden from the search page.
-  const homepageItems = await getCollectionProducts({
+  let homepageItems = await getCollectionProducts({
     collection: 'hidden-homepage-featured-items'
   });
+
+  // Fall back to mock data if Shopify isn't configured or no products found
+  if (!homepageItems.length) {
+    homepageItems = MOCK_PRODUCTS.slice(0, 3);
+  }
 
   if (!homepageItems[0] || !homepageItems[1] || !homepageItems[2]) return null;
 
